@@ -14,37 +14,20 @@ app.config['SECRET_KEY'] = 'DAT158'
 
 def index():
 
-    """
-    We grab the form defined in `forms.py`. 
-    If the form is submitted (and passes the validators) 
-    then we grab all the values entered by the user and 
-    predict. 
-    """
-
-
-    # Handle request from form
     form = DataForm()
     if form.validate_on_submit():
 
-        # If the form is submitted and validated, store all the 
-        # inputs in session
         for fieldname, value in form.data.items():
             session[fieldname] = value
 
-
-        # Get additional user data
         user_info = request.headers.get('User-Agent')
 
-        # Preprocess data
         data = preprocess(session)
 
-        # Get model outputs 
         pred = predict(data)
 
-        # Postprocess results
         pred = postprocess(pred)
 
-        # Create the payload (we use session)
         session['user_info'] = user_info
         session['pred'] = pred
 
